@@ -2,10 +2,14 @@
   "name": "toefungi-nodelib-base",
   "version": "1.0.0",
   "description": "A base project for NodeJS libraries or packages",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "mocha",
-    "coverage": "nyc --reporter=lcov mocha"
+    "coverage": "nyc --reporter=lcov mocha",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "integration": "ts-node test/integration/index.spec.ts"
   },
   "keywords": [
     "Base"
@@ -13,7 +17,7 @@
   "author": "Alex Pickering",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.1"
   },
   "devDependencies": {
     "@types/chai": "4.1.7",
