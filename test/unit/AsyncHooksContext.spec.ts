@@ -28,4 +28,11 @@ describe('AsyncHooksContext', () => {
     context.should.have.property('id')
     context.id.should.deep.equal(contextId)
   })
+
+  it('returns an empty object when the context cannot be found by execution ID', () => {
+    const foo = new Foo()
+
+    const context = foo.bar()
+    context.should.deep.equal({})
+  })
 })
