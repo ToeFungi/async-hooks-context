@@ -22,7 +22,7 @@ $ npm i
 ## Usage
 Simply wrap the execution of a function within the `initContext`, add the required property to the `context` object and
 it will become available during the execution via the `getContext()` function.
-```
+```typescript
 import { AsyncHooksContexts } from './AsyncHooksContext'
 
 class Foo {
