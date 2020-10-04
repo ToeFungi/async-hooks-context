@@ -1,6 +1,6 @@
 {
   "name": "async-hooks-context",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Creating request-scoped contexts using the async_hooks repository",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
