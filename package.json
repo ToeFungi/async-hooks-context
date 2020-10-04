@@ -1,7 +1,7 @@
 {
-  "name": "toefungi-nodelib-base",
+  "name": "async-hooks-context",
   "version": "1.0.0",
-  "description": "A base project for NodeJS libraries or packages",
+  "description": "Creating request-scoped contexts using the async_hooks repository",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,7 +12,12 @@
     "integration": "ts-node test/integration/index.spec.ts"
   },
   "keywords": [
-    "Base"
+    "async_hooks",
+    "context",
+    "global",
+    "variables",
+    "requests",
+    "async"
   ],
   "author": "Alex Pickering",
   "license": "ISC",

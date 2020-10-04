@@ -1,4 +1,4 @@
-import { AsyncHooksContexts } from '../../src'
+import { AsyncHooksContexts } from '../../src/AsyncHooksContext'
 
 class Foo {
   public bar() {
@@ -10,7 +10,7 @@ class Bar {
   constructor(private foo: Foo) {
   }
 
-  public bar() {
+  public foobar() {
     return this.foo.bar()
   }
 }

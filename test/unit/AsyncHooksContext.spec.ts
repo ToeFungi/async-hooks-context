@@ -1,14 +1,15 @@
-import { AsyncHooksContexts } from '../../src'
+import { AsyncHooksContexts } from '../../src/AsyncHooksContext'
 import { Bar, Foo } from '../mocks/Foo'
 
 describe('AsyncHooksContext', () => {
   const contextId = 'some-context-id'
 
   it('returns the correct context ID when the class is wrapped immediately', () => {
+    const foo = new Foo()
+
     const context = AsyncHooksContexts.initContext((context: any) => {
       context.id = contextId
-      return new Foo()
-        .bar()
+      return foo.bar()
     })
 
     context.should.have.property('id')
@@ -17,11 +18,11 @@ describe('AsyncHooksContext', () => {
 
   it('returns the correct context ID when the class is injected into another class', () => {
     const foo = new Foo()
+    const bar = new Bar(foo)
 
     const context = AsyncHooksContexts.initContext((context: any) => {
       context.id = contextId
-      return new Bar(foo)
-        .bar()
+      return bar.foobar()
     })
 
     context.should.have.property('id')
