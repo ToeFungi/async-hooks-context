@@ -19,6 +19,13 @@ $ cd async-hooks-context
 $ npm i
 ```
 
+## Installation
+Install this Async Hooks Context library via npm.
+```bash
+$ npm i --save async-hooks-context
+```
+This project only has no dependencies.
+
 ## Usage
 Simply wrap the execution of a function within the `initContext`, add the required property to the `context` object and
 it will become available during the execution via the `getContext()` function.
