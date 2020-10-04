@@ -35,7 +35,7 @@ const foo = new Foo()
 
 const { id } = AsyncHooksContexts.initContext((context: any) => {
   context.id = 'some-context-id'
-  foo.bar()
+  return foo.bar()
 })
 
 // some-context-id
