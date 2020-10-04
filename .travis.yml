@@ -32,13 +32,12 @@ jobs:
     - stage: test
       script:
         - npm run coverage
-    - stage: sonar
-      script:
-        - sonar-scanner
+    - script: sonar-scanner
+      name: sonar
       addons:
         sonarcloud:
-          token:
-            secure: '$SONAR_API_KEY'
+          organization: "skaleb"
+          token: "$SONAR_API_KEY"
     - stage: build
       script:
         - npm run build
