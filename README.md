@@ -27,26 +27,26 @@ $ npm i --save async-hooks-context
 This project only has no dependencies.
 
 ## Usage
-Simply wrap the execution of a function within the `initContext`, add the required property to the `context` object and
-it will become available during the execution via the `getContext()` function.
+Simply create the request context using the `createRequestContext()` function which optionally takes an existing ID used
+for correlation, or generates a new UUID v4. Then in subsequent calls in the same scope, you can retrieve the 
+correlation ID by using the `getRequestContext()` function. This returns an object containing the property.
 ```typescript
-import { AsyncHooksContexts } from './AsyncHooksContext'
+import { getRequestContext, createRequestContext } from './AsyncHooksContext'
 
 class Foo {
   public bar() {
-    return AsyncHooksContexts.getContext()
+    return getRequestContext()
   }
 }
 
+// Optionally takes meta object to be stored for request
+createRequestContext({ meta: 'data' }, 'some-context-id')
 const foo = new Foo()
 
-const { id } = AsyncHooksContexts.initContext((context: any) => {
-  context.id = 'some-context-id'
-  return foo.bar()
-})
+const { correlationId } = foo.bar() 
 
 // some-context-id
-console.log(id)
+console.log(correlationId)
 ```
 
 ## Running Tests

@@ -1,33 +1,31 @@
+import * as uuid from 'uuid'
 import * as asyncHooks from 'async_hooks'
 
-/**
- * Execution contexts
- */
-const contexts: any = {}
+const store = new Map()
 
-/**
- * Async Hooks Context creates and retrieves the context for an execution
- */
-class AsyncHooksContexts {
-  /**
-   * Initialise the context for the current execution
-   */
-  public static initContext(fn: Function) {
-    const asyncResource = new asyncHooks.AsyncResource('REQUEST_CONTEXT')
-    return asyncResource.runInAsyncScope(() => {
-      const asyncId = asyncHooks.executionAsyncId()
-      contexts[asyncId] = {}
-      return fn(contexts[asyncId])
-    })
+const asyncHook = asyncHooks.createHook({
+  init: (asyncId, _, triggerAsyncId) => {
+    if (store.has(triggerAsyncId)) {
+      store.set(asyncId, store.get(triggerAsyncId))
+    }
+  },
+  destroy: (asyncId) => {
+    if (store.has(asyncId)) {
+      store.delete(asyncId)
+    }
   }
+})
 
-  /**
-   * Get the current execution context
-   */
-  public static getContext() {
-    const asyncId = asyncHooks.executionAsyncId()
-    return contexts[asyncId] || {}
-  }
+asyncHook.enable()
+
+const createRequestContext = (data?: object, correlationId = uuid.v4()) => {
+  const requestInfo = { correlationId, data }
+  store.set(asyncHooks.executionAsyncId(), requestInfo)
+  return requestInfo
 }
 
-export { AsyncHooksContexts }
+const getRequestContext = () => {
+  return store.get(asyncHooks.executionAsyncId())
+}
+
+export { createRequestContext, getRequestContext }
