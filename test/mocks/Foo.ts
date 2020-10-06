@@ -1,8 +1,8 @@
-import { AsyncHooksContexts } from '../../src/AsyncHooksContext'
+import { getRequestContext } from '../../src/AsyncHooksContext'
 
 class Foo {
   public bar() {
-    return AsyncHooksContexts.getContext()
+    return getRequestContext()
   }
 }
 
