@@ -24,16 +24,19 @@ jobs:
     - stage: quality
       script: npm audit
       name: audit
+
     - script: npm run lint
       name: lint
+
     - script: npm run coverage
       name: coverage
+
     - script: sonar-scanner
       name: sonar
       addons:
         sonarcloud:
-          organization: "skaleb"
-          token: "$SONAR_API_KEY"
+          organization: skaleb
+          token: $SONAR_API_KEY
 
     - stage: build
       script:

@@ -1,3 +1,9 @@
-import { createRequestContext, getRequestContext } from './AsyncHooksContext'
+import {
+  setCorrelationId,
+  upsertRequestContext,
+  getCorrelationId,
+  getRequestContext,
+  cleanContext
+} from './AsyncHooksContext'
 
-export { createRequestContext, getRequestContext }
+export { setCorrelationId, upsertRequestContext, getCorrelationId, getRequestContext, cleanContext }

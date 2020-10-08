@@ -1,31 +1,89 @@
 import * as uuid from 'uuid'
 import * as asyncHooks from 'async_hooks'
 
-const store = new Map()
+/**
+ * Store for the request scoped context
+ */
+const contexts = new Map()
 
-const asyncHook = asyncHooks.createHook({
-  init: (asyncId, _, triggerAsyncId) => {
-    if (store.has(triggerAsyncId)) {
-      store.set(asyncId, store.get(triggerAsyncId))
+// Configuration used for the async hooks context
+const asyncHooksConfig: asyncHooks.HookCallbacks = {
+  init: (asyncId: number, _: string, triggerAsyncId: number) => {
+    if (contexts.has(triggerAsyncId)) {
+      contexts.set(asyncId, contexts.get(triggerAsyncId))
     }
   },
-  destroy: (asyncId) => {
-    if (store.has(asyncId)) {
-      store.delete(asyncId)
+  destroy: (asyncId: number) => {
+    if (contexts.has(asyncId)) {
+      contexts.delete(asyncId)
     }
   }
-})
+}
 
+// Create the async hooks context
+const asyncHook = asyncHooks.createHook(asyncHooksConfig)
+
+// Enable the async hooks context
 asyncHook.enable()
 
-const createRequestContext = (data?: object, correlationId = uuid.v4()) => {
-  const requestInfo = { correlationId, data }
-  store.set(asyncHooks.executionAsyncId(), requestInfo)
-  return requestInfo
+/**
+ * Create or update the request context with the specified data
+ * @private
+ */
+const upsertContext = (data: object) => {
+  const existingContext = contexts.get(asyncHooks.executionAsyncId())
+
+  if (existingContext) {
+    const updatedContext = {
+      ...existingContext,
+      ...data
+    }
+
+    contexts.set(asyncHooks.executionAsyncId(), updatedContext)
+    return data
+  }
+
+  contexts.set(asyncHooks.executionAsyncId(), { ...data })
+  return data
 }
 
+/**
+ * Creates or updates the context and stores a correlation ID for logging
+ */
+const setCorrelationId = (correlationId: string = uuid.v4()): string => {
+  const correlationContext = { correlationId }
+  upsertContext(correlationContext)
+  return correlationId
+}
+
+/**
+ * Creates or updates the context for the current request and stores the passed object
+ */
+const upsertRequestContext = (data: object) => {
+  upsertContext(data)
+  return data
+}
+
+/**
+ * Retrieve the correlation ID stored in request context if created
+ */
+const getCorrelationId = (): string => {
+  const context = contexts.get(asyncHooks.executionAsyncId())
+  return context?.correlationId
+}
+
+/**
+ * Retrieves the object stored in request context is created
+ */
 const getRequestContext = () => {
-  return store.get(asyncHooks.executionAsyncId())
+  return contexts.get(asyncHooks.executionAsyncId())
 }
 
-export { createRequestContext, getRequestContext }
+/**
+ * Clean up all existing contexts that are stored. This does not kill the async_hook thread however.
+ */
+const cleanContext = () => {
+  return contexts.delete(asyncHooks.executionAsyncId())
+}
+
+export { setCorrelationId, upsertRequestContext, getCorrelationId, getRequestContext, cleanContext }
