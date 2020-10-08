@@ -1,8 +1,12 @@
-import { getRequestContext } from '../../src/AsyncHooksContext'
+import { getCorrelationId, getRequestContext } from '../../src/AsyncHooksContext'
 
 class Foo {
-  public bar() {
+  public getContext() {
     return getRequestContext()
+  }
+
+  public getCorrelation() {
+    return getCorrelationId()
   }
 }
 
@@ -10,8 +14,12 @@ class Bar {
   constructor(private foo: Foo) {
   }
 
-  public foobar() {
-    return this.foo.bar()
+  public getContext() {
+    return this.foo.getContext()
+  }
+
+  public getCorrelation() {
+    return this.foo.getCorrelation()
   }
 }
 
