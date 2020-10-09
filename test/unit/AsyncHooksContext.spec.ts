@@ -5,7 +5,7 @@ import { expect } from 'chai'
 import { createSandbox } from 'sinon'
 
 import { Bar, Foo } from '../mocks/Foo'
-import { cleanContext, getCorrelationId, getRequestContext, setCorrelationId, upsertRequestContext } from '../../src'
+import { cleanContext, getCorrelationId, getRequestContext, setCorrelationId, updateRequestContext } from '../../src'
 
 describe('AsyncHooksContext', () => {
   const sandbox = createSandbox()
@@ -54,7 +54,7 @@ describe('AsyncHooksContext', () => {
         correlationId
       }
 
-      upsertRequestContext(data)
+      updateRequestContext(data)
 
       const response = setCorrelationId(correlationId)
       const storedContext = getRequestContext()
@@ -66,7 +66,7 @@ describe('AsyncHooksContext', () => {
 
   describe('#upsertRequestContext', () => {
     it('returns the data after creating a context with the supplied data', () => {
-      const response = upsertRequestContext(data)
+      const response = updateRequestContext(data)
       const contextData = getRequestContext()
 
       response.should.deep.equal(data)
@@ -81,7 +81,7 @@ describe('AsyncHooksContext', () => {
 
       setCorrelationId(correlationId)
 
-      const response = upsertRequestContext(data)
+      const response = updateRequestContext(data)
       const contextData = getRequestContext()
 
       response.should.deep.equal(data)
@@ -100,8 +100,8 @@ describe('AsyncHooksContext', () => {
 
       setCorrelationId(correlationId)
 
-      upsertRequestContext(data)
-      upsertRequestContext(updatedData)
+      updateRequestContext(data)
+      updateRequestContext(updatedData)
 
       const contextData = getRequestContext()
 
@@ -129,7 +129,7 @@ describe('AsyncHooksContext', () => {
 
   describe('#getRequestContext', () => {
     it('returns the currently stored context if found', () => {
-      upsertRequestContext(data)
+      updateRequestContext(data)
 
       return getRequestContext()
         .should.deep.equal(data)
@@ -147,7 +147,7 @@ describe('AsyncHooksContext', () => {
 
   describe('#cleanContext', () => {
     it('removes all existing contexts from the request scope', () => {
-      upsertRequestContext(data)
+      updateRequestContext(data)
 
       const createdContext = getRequestContext()
       createdContext.should.deep.equal(data)
@@ -170,7 +170,7 @@ describe('AsyncHooksContext', () => {
     })
 
     it('returns the context from within a class', () => {
-      upsertRequestContext(data)
+      updateRequestContext(data)
 
       const foo = new Foo()
       const bar = new Bar(foo)
