@@ -73,11 +73,11 @@ console.log(wrapper(data))
 ```
 
 #### Context Objects - Get / Set
-Call the `upsertRequestContext()` function in the global or parent scope and pass in the object that should be stored.
+Call the `updateRequestContext()` function in the global or parent scope and pass in the object that should be stored.
 This will create or update the existing context with the new data provided. An object that is passed with the same keys
 will overwrite duplicate keys. The correlation ID will also be available in the returned context.
 ```TypeScript
-import { getRequestContext, upsertRequestContext } from './AsyncHooksContext'
+import { getRequestContext, updateRequestContext } from './AsyncHooksContext'
 
 const data = {
   meta: 'data'
@@ -90,8 +90,8 @@ const foo = () => {
 
 // Wrapper to ensure that the context is in the proper scope for the child function
 const wrapper = (data: object) => {
-  // Pass the data required in the context, into the upsert function
-  upsertRequestContext(data)
+  // Pass the data required in the context, into the update function
+  updateRequestContext(data)
   return foo()
 }
 
