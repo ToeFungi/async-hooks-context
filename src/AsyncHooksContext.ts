@@ -30,7 +30,7 @@ asyncHook.enable()
  * Create or update the request context with the specified data
  * @private
  */
-const upsertContext = (data: object) => {
+const updateContext = (data: object) => {
   const existingContext = contexts.get(asyncHooks.executionAsyncId())
 
   if (existingContext) {
@@ -52,15 +52,15 @@ const upsertContext = (data: object) => {
  */
 const setCorrelationId = (correlationId: string = uuid.v4()): string => {
   const correlationContext = { correlationId }
-  upsertContext(correlationContext)
+  updateContext(correlationContext)
   return correlationId
 }
 
 /**
  * Creates or updates the context for the current request and stores the passed object
  */
-const upsertRequestContext = (data: object) => {
-  upsertContext(data)
+const updateRequestContext = (data: object) => {
+  updateContext(data)
   return data
 }
 
@@ -75,7 +75,7 @@ const getCorrelationId = (): string => {
 /**
  * Retrieves the object stored in request context is created
  */
-const getRequestContext = () => {
+const getRequestContext = (): object => {
   return contexts.get(asyncHooks.executionAsyncId())
 }
 
@@ -86,4 +86,4 @@ const cleanContext = () => {
   return contexts.delete(asyncHooks.executionAsyncId())
 }
 
-export { setCorrelationId, upsertRequestContext, getCorrelationId, getRequestContext, cleanContext }
+export { setCorrelationId, updateRequestContext, getCorrelationId, getRequestContext, cleanContext }
