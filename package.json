@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "mocha --config ./test/support/unit.yml",
-    "coverage": "nyc --reporter=lcov mocha",
+    "coverage": "nyc --reporter=lcov npm run test",
     "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "files": [
