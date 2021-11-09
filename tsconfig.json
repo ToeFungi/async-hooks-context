@@ -12,8 +12,8 @@
     ],
     "target": "es5",
     "outDir": "dist/",
+    "baseUrl": "./",
     "typeRoots": [
-      "types",
       "node_modules/@types"
     ]
   },
