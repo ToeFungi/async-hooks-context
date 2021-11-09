@@ -57,7 +57,7 @@ jobs:
         run: npm ci
 
       - name: NPM Auditing and Lint
-        run: npm audit && npm run lint
+        run: npm audit --production && npm run lint
 
       - name: Run Unit Tests
         run: npm run coverage
